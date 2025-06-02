@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./favicon/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- FONT Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,6 +46,13 @@
           >
           <select id="communeSelect"></select>
         </form>
+        <div class="form-options">
+          <label><input type="checkbox" id="latitude-checkbox"> Latitude</label>
+          <label><input type="checkbox" id="longitude-checkbox"> Longitude</label>
+          <label><input type="checkbox" id="rainfall-checkbox"> Cumul de pluie</label>
+          <label><input type="checkbox" id="wind-checkbox"> Vent moyen</label>
+          <label><input type="checkbox" id="wind-direction-checkbox"> Direction du vent</label>
+</div>
         <button id="validationButton">Valider</button>
       </section>
       <section id="weatherInformation">

@@ -1,3 +1,51 @@
+// D'abord, ajoute ces variables globales pour stocker les options choisies
+let selectedDays = 1; // nombre de jours sélectionné
+let selectedOptions = {
+  latitude: false,
+  longitude: false,
+  rainfall: false,
+  wind: false,
+  windDirection: false
+};
+// Fonction pour mettre à jour les options sélectionnées (à appeler depuis tes checkboxes)
+function updateSelectedOptions() {
+  selectedOptions.latitude = document.getElementById("latitude-checkbox")?.checked || false;
+  selectedOptions.longitude = document.getElementById("longitude-checkbox")?.checked || false;
+  selectedOptions.rainfall = document.getElementById("rainfall-checkbox")?.checked || false;
+  selectedOptions.wind = document.getElementById("wind-checkbox")?.checked || false;
+  selectedOptions.windDirection = document.getElementById("wind-direction-checkbox")?.checked || false;
+}
+
+// Fonction pour récupérer les coordonnées de la commune
+async function fetchCommuneCoordinates(insee) {
+  try {
+    const response = await fetch(`https://geo.api.gouv.fr/communes/${insee}`);
+    const data = await response.json();
+    return {
+      latitude: data.centre.coordinates[1], // lat/lng inversés dans l'API
+      longitude: data.centre.coordinates[0]
+    };
+  } catch (error) {
+    console.error("Erreur lors de la récupération des coordonnées:", error);
+    return null;
+  }
+}
+// Fonction pour créer une carte avec Leaflet
+function createMap(latitude, longitude, ville, containerId) {
+  // Créer la carte
+  const map = L.map(containerId).setView([latitude, longitude], 12);
+  
+  // Ajouter les tuiles OpenStreetMap
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+  
+  // Ajouter un marqueur
+  L.marker([latitude, longitude])
+    .addTo(map)
+    .bindPopup(`<b>${ville}</b><br>Lat: ${latitude.toFixed(4)}<br>Lng: ${longitude.toFixed(4)}`)
+    .openPopup();
+}
 function createCard(data) {
   console.log("Création de la carte avec les données :", data);
 
