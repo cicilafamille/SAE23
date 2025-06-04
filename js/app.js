@@ -64,10 +64,15 @@ function displayCommunes(data) {
 // Fonction pour effectuer la requête API de météo en utilisant le code de la commune sélectionnée
 async function fetchMeteoByCommune(selectedCommune) {
   try {
+    const promises = [];
+    for (let i = 0; i < numberOfDays;i++){
     const response = await fetch(
       `https://api.meteo-concept.com/api/forecast/daily/0?token=a1b6b425ab71684a60d6add82ba8b1700b50f2e841326bc0d6ecff3532b68956&insee=${selectedCommune}`
     );
-    const data = await response.json();
+    promises.push(response);
+  }
+    const responses = await Promise.all(promises);
+    const data = await Promise.all(responses.map(r => r.json()));
     return data;
   } catch (error) {
     console.error("Erreur lors de la requête API:", error);
@@ -99,6 +104,7 @@ codePostalInput.addEventListener("input", async () => {
 validationButton.addEventListener("click", async () => {
   const selectedCommune = communeSelect.value;
   const communeName = communeSelect.options[communeSelect.selectedIndex].text;
+  const numberOfDays = parseInt(daysSlider.value); // récupérer le nombre de jours
 
   if (selectedCommune) {
     try {

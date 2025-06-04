@@ -118,6 +118,7 @@ async function createCard(data) {
       dayCard.appendChild(windDirDiv);
     }
   });
+  
   //Ajouter une carte seulement pour le premier jour si lat/lng demandées
   if (index === 0 && coordinates && (showLatitude || showLongitude)) {
     let mapContainer = document.createElement("div");
