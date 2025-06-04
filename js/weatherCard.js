@@ -124,6 +124,22 @@ async function createCard(data) {
       dayCard.appendChild(windDirDiv);
     }
   });
+  //Ajouter une carte seulement pour le premier jour si lat/lng demandées
+  if (index === 0 && coordinates && (showLatitude || showLongitude)) {
+    let mapContainer = document.createElement("div");
+    mapContainer.classList.add("map-container");
+    mapContainer.id = `map-day-${index}`;
+    dayCard.appendChild(mapContainer);
+    
+    // Créer la carte après un petit délai
+    setTimeout(() => {
+      createMap(coordinates.latitude, coordinates.longitude, data.ville, `map-day-${index}`);
+    }, 100);
+  }
+
+  // Ajouter la carte du jour à la section météo
+  weatherSection.appendChild(dayCard);
+};
   // Ajouter un bouton de retour vers le formulaire
   let reloadButton = document.createElement("div");
   reloadButton.textContent = "Nouvelle recherche";
@@ -137,7 +153,7 @@ async function createCard(data) {
   // Gérer la visibilité des sections
   requestSection.style.display = "none";
   weatherSection.style.display = "flex";
-}
+
 
 function displayHours(sunHours) {
   return sunHours + (sunHours > 1 ? " heures" : " heure");
