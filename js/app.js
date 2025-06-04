@@ -119,4 +119,25 @@ validationButton.addEventListener("click", async () => {
     }
   }
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("toggle-darkmode");
 
+  // Si le mode sombre est activé dans le localStorage, on applique la classe "dark" au body et on change le texte du bouton
+  if (localStorage.getItem("darkmode") === "enabled") {
+    document.body.classList.add("dark");
+    toggleBtn.textContent = "☀️ Mode Clair";
+  }
+
+  // Au clic, on active/désactive le mode sombre
+  toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+      toggleBtn.textContent = "☀️ Mode Clair";
+      localStorage.setItem("darkmode", "enabled");
+    } else {
+      toggleBtn.textContent = "🌙 Mode Sombre";
+      localStorage.setItem("darkmode", "disabled");
+    }
+  });
+});
