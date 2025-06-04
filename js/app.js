@@ -93,8 +93,12 @@ validationButton.addEventListener("click", async () => {
 
   if (selectedCommune) {
     try {
-      const data = await fetchMeteoByCommune(selectedCommune);
-      createCard({ forecast: data.forecast, ville: communeName });
+      const weatherData = await fetchMeteoByCommune(selectedCommune);
+      createCard({ 
+        forecasts: weatherData, 
+        ville: communeName,
+        commune: selectedCommune 
+      });
     } catch (error) {
       console.error("Erreur lors de la requête API meteoConcept:", error);
     }

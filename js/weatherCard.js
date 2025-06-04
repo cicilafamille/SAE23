@@ -28,28 +28,9 @@ function createMap(latitude, longitude, ville, containerId) {
     .bindPopup(`<b>${ville}</b><br>Lat: ${latitude.toFixed(4)}<br>Lng: ${longitude.toFixed(4)}`)
     .openPopup();
 }
-function createCard(data) {
+async function createCard(data) {
   console.log("Création de la carte avec les données :", data);
   
-  // Créer de nouvelles divs
-  let weatherTmin = document.createElement("div");
-  let weatherTmax = document.createElement("div");
-  let weatherPrain = document.createElement("div");
-  let weatherSunHours = document.createElement("div");
-
-  // Ajouter du contenu aux div
-  weatherTmin.textContent = `température minimale : ${data.forecast.tmin}°C`;
-  weatherTmax.textContent = `température maximale : ${data.forecast.tmax}°C`;
-  weatherPrain.textContent = `Probabilité de pluie : ${data.forecast.probarain}%`;
-  weatherSunHours.textContent = `Ensoleillement journalier : ${displayHours(
-    data.forecast.sun_hours
-  )}`;
-  
-  dayCard.appendChild(weatherTmin);
-  dayCard.appendChild(weatherTmax);
-  dayCard.appendChild(weatherPrain);
-  dayCard.appendChild(weatherSunHours);
-
   // Sélectionner les sections
   let weatherSection = document.getElementById("weatherInformation");
   let requestSection = document.getElementById("cityForm");
@@ -61,12 +42,56 @@ function createCard(data) {
   let coordinates = null;
   const showLatitude = document.getElementById("latitude-checkbox").checked;
   const showLongitude = document.getElementById("longitude-checkbox").checked;
+
+  if (showLatitude || showLongitude) {
+    coordinates = await fetchCommuneCoordinates(data.commune);
+  }
   
   // Ajouter les nouvelles div à la section
   weatherSection.appendChild(weatherTmin);
   weatherSection.appendChild(weatherTmax);
   weatherSection.appendChild(weatherPrain);
   weatherSection.appendChild(weatherSunHours);
+
+  //Créer une carte pour chaque jour
+  data.forecasts.forEach((dayData, index) => {
+    const forecast = dayData.forecast;
+    
+    // Créer une carte pour ce jour
+    let dayCard = document.createElement("div");
+    dayCard.classList.add("weather-day-card");
+    
+    // Titre du jour
+    let dayTitle = document.createElement("div");
+    dayTitle.classList.add("weather-day-title");
+    
+    if (index === 0) {
+      dayTitle.textContent = `Aujourd'hui - ${data.ville}`;
+    } else if (index === 1) {
+      dayTitle.textContent = `Demain - ${data.ville}`;
+    } else {
+      const date = new Date();
+      date.setDate(date.getDate() + index);
+      dayTitle.textContent = `${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} - ${data.ville}`;
+    }
+    
+    dayCard.appendChild(dayTitle);
+
+    // Informations météo de base
+    let weatherTmin = document.createElement("div");
+    let weatherTmax = document.createElement("div");
+    let weatherPrain = document.createElement("div");
+    let weatherSunHours = document.createElement("div");
+    
+    weatherTmin.textContent = `Température minimale : ${forecast.tmin}°C`;
+    weatherTmax.textContent = `Température maximale : ${forecast.tmax}°C`;
+    weatherPrain.textContent = `Probabilité de pluie : ${forecast.probarain}%`;
+    weatherSunHours.textContent = `Ensoleillement journalier : ${displayHours(forecast.sun_hours)}`;
+
+    dayCard.appendChild(weatherTmin);
+    dayCard.appendChild(weatherTmax);
+    dayCard.appendChild(weatherPrain);
+    dayCard.appendChild(weatherSunHours);
 
   //Ajouter les informations optionnelles
     if (showLatitude && coordinates) {
@@ -98,7 +123,7 @@ function createCard(data) {
       windDirDiv.textContent = `Direction du vent : ${forecast.dirwind10m || 0}°`;
       dayCard.appendChild(windDirDiv);
     }
-
+  });
   // Ajouter un bouton de retour vers le formulaire
   let reloadButton = document.createElement("div");
   reloadButton.textContent = "Nouvelle recherche";
