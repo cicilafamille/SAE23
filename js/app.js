@@ -62,7 +62,7 @@ function displayCommunes(data) {
   }
 }
 // Fonction pour effectuer la requête API de météo en utilisant le code de la commune sélectionnée
-async function fetchMeteoByCommune(selectedCommune) {
+async function fetchMeteoByCommune(selectedCommune, numberOfDays) {
   try {
     const promises = [];
     for (let i = 0; i < numberOfDays;i++){
@@ -108,7 +108,7 @@ validationButton.addEventListener("click", async () => {
 
   if (selectedCommune) {
     try {
-      const weatherData = await fetchMeteoByCommune(selectedCommune);
+      const weatherData = await fetchMeteoByCommune(selectedCommune, numberOfDays);
       createCard({ 
         forecasts: weatherData, 
         ville: communeName,

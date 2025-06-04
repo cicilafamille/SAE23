@@ -1,7 +1,7 @@
 // Fonction pour récupérer les coordonnées de la commune
 async function fetchCommuneCoordinates(insee) {
   try {
-    const response = await fetch(`https://geo.api.gouv.fr/communes/${insee}`);
+    const response = await fetch(`https://geo.api.gouv.fr/communes/${insee}?fields=centre`);
     const data = await response.json();
     return {
       latitude: data.centre.coordinates[1], // lat/lng inversés dans l'API
@@ -30,10 +30,12 @@ function createMap(latitude, longitude, ville, containerId) {
 }
 async function createCard(data) {
   console.log("Création de la carte avec les données :", data);
-  
   // Sélectionner les sections
   let weatherSection = document.getElementById("weatherInformation");
   let requestSection = document.getElementById("cityForm");
+
+  requestSection.style.display = "none";
+  weatherSection.style.display = "flex";
 
   // Vider la section météo
   weatherSection.innerHTML = "";
@@ -66,7 +68,11 @@ async function createCard(data) {
     } else {
       const date = new Date();
       date.setDate(date.getDate() + index);
-      dayTitle.textContent = `${date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} - ${data.ville}`;
+      dayTitle.textContent = `${date.toLocaleDateString('fr-FR', {
+         weekday: 'long',
+          day: 'numeric',
+           month: 'long'
+      })} - ${data.ville}`;
     }
     
     dayCard.appendChild(dayTitle);
@@ -86,7 +92,7 @@ async function createCard(data) {
     dayCard.appendChild(weatherTmax);
     dayCard.appendChild(weatherPrain);
     dayCard.appendChild(weatherSunHours);
-
+  
   //Ajouter les informations optionnelles
     if (showLatitude && coordinates) {
       let latitudeDiv = document.createElement("div");
@@ -117,23 +123,20 @@ async function createCard(data) {
       windDirDiv.textContent = `Direction du vent : ${forecast.dirwind10m || 0}°`;
       dayCard.appendChild(windDirDiv);
     }
-  });
-  
-  //Ajouter une carte seulement pour le premier jour si lat/lng demandées
-  if (index === 0 && coordinates && (showLatitude || showLongitude)) {
-    let mapContainer = document.createElement("div");
-    mapContainer.classList.add("map-container");
-    mapContainer.id = `map-day-${index}`;
-    dayCard.appendChild(mapContainer);
+    //Ajouter une carte seulement pour le premier jour si lat/lng demandées
+    if (index === 0 && coordinates && (showLatitude || showLongitude)) {
+      let mapContainer = document.createElement("div");
+     mapContainer.classList.add("map-container");
+      mapContainer.id = `map-day-${index}`;
+      dayCard.appendChild(mapContainer);
     
     // Créer la carte après un petit délai
     setTimeout(() => {
       createMap(coordinates.latitude, coordinates.longitude, data.ville, `map-day-${index}`);
     }, 100);
   }
-
-  // Ajouter la carte du jour à la section météo
-  weatherSection.appendChild(dayCard);
+    weatherSection.appendChild(dayCard); // Ajouter la carte du jour à la section météo
+  });
 };
   // Ajouter un bouton de retour vers le formulaire
   let reloadButton = document.createElement("div");
@@ -144,11 +147,6 @@ async function createCard(data) {
   reloadButton.addEventListener("click", function () {
     location.reload();
   });
-
-  // Gérer la visibilité des sections
-  requestSection.style.display = "none";
-  weatherSection.style.display = "flex";
-
 
 function displayHours(sunHours) {
   return sunHours + (sunHours > 1 ? " heures" : " heure");
