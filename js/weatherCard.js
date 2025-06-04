@@ -46,12 +46,6 @@ async function createCard(data) {
   if (showLatitude || showLongitude) {
     coordinates = await fetchCommuneCoordinates(data.commune);
   }
-  
-  // Ajouter les nouvelles div à la section
-  weatherSection.appendChild(weatherTmin);
-  weatherSection.appendChild(weatherTmax);
-  weatherSection.appendChild(weatherPrain);
-  weatherSection.appendChild(weatherSunHours);
 
   //Créer une carte pour chaque jour
   data.forecasts.forEach((dayData, index) => {

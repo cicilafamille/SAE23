@@ -4,6 +4,15 @@ const codePostalInput = document.getElementById("code-postal");
 const communeSelect = document.getElementById("communeSelect");
 const validationButton = document.getElementById("validationButton");
 
+//Éléments pour le slider des jours
+const daysSlider = document.getElementById("daysSlider");
+const daysValue = document.getElementById("daysValue");
+
+// Écouteur pour le slider
+daysSlider.addEventListener("input", function() {
+  daysValue.textContent = this.value;
+});
+
 // Fonction pour effectuer la requête API des communes en utilisant le code postal
 async function fetchCommunesByCodePostal(codePostal) {
   try {
