@@ -1,21 +1,3 @@
-// D'abord, ajoute ces variables globales pour stocker les options choisies
-let selectedDays = 1; // nombre de jours sélectionné
-let selectedOptions = {
-  latitude: false,
-  longitude: false,
-  rainfall: false,
-  wind: false,
-  windDirection: false
-};
-// Fonction pour mettre à jour les options sélectionnées (à appeler depuis tes checkboxes)
-function updateSelectedOptions() {
-  selectedOptions.latitude = document.getElementById("latitude-checkbox")?.checked || false;
-  selectedOptions.longitude = document.getElementById("longitude-checkbox")?.checked || false;
-  selectedOptions.rainfall = document.getElementById("rainfall-checkbox")?.checked || false;
-  selectedOptions.wind = document.getElementById("wind-checkbox")?.checked || false;
-  selectedOptions.windDirection = document.getElementById("wind-direction-checkbox")?.checked || false;
-}
-
 // Fonction pour récupérer les coordonnées de la commune
 async function fetchCommuneCoordinates(insee) {
   try {
@@ -48,12 +30,13 @@ function createMap(latitude, longitude, ville, containerId) {
 }
 function createCard(data) {
   console.log("Création de la carte avec les données :", data);
-
+  
   // Créer de nouvelles divs
   let weatherTmin = document.createElement("div");
   let weatherTmax = document.createElement("div");
   let weatherPrain = document.createElement("div");
   let weatherSunHours = document.createElement("div");
+
   // Ajouter du contenu aux div
   weatherTmin.textContent = `température minimale : ${data.forecast.tmin}°C`;
   weatherTmax.textContent = `température maximale : ${data.forecast.tmax}°C`;
@@ -61,15 +44,60 @@ function createCard(data) {
   weatherSunHours.textContent = `Ensoleillement journalier : ${displayHours(
     data.forecast.sun_hours
   )}`;
+  
+  dayCard.appendChild(weatherTmin);
+  dayCard.appendChild(weatherTmax);
+  dayCard.appendChild(weatherPrain);
+  dayCard.appendChild(weatherSunHours);
 
   // Sélectionner les sections
   let weatherSection = document.getElementById("weatherInformation");
   let requestSection = document.getElementById("cityForm");
+
+  // Vider la section météo
+  weatherSection.innerHTML = "";
+  
+  // Récupérer les coordonnées si nécessaire (pour la carte)
+  let coordinates = null;
+  const showLatitude = document.getElementById("latitude-checkbox").checked;
+  const showLongitude = document.getElementById("longitude-checkbox").checked;
+  
   // Ajouter les nouvelles div à la section
   weatherSection.appendChild(weatherTmin);
   weatherSection.appendChild(weatherTmax);
   weatherSection.appendChild(weatherPrain);
   weatherSection.appendChild(weatherSunHours);
+
+  //Ajouter les informations optionnelles
+    if (showLatitude && coordinates) {
+      let latitudeDiv = document.createElement("div");
+      latitudeDiv.textContent = `Latitude : ${coordinates.latitude.toFixed(4)}`;
+      dayCard.appendChild(latitudeDiv);
+    }
+
+    if (showLongitude && coordinates) {
+      let longitudeDiv = document.createElement("div");
+      longitudeDiv.textContent = `Longitude : ${coordinates.longitude.toFixed(4)}`;
+      dayCard.appendChild(longitudeDiv);
+    }
+
+    if (document.getElementById("rainfall-checkbox").checked) {
+      let rainfallDiv = document.createElement("div");
+      rainfallDiv.textContent = `Cumul de pluie : ${forecast.rr1 || 0} mm`;
+      dayCard.appendChild(rainfallDiv);
+    }
+
+    if (document.getElementById("wind-checkbox").checked) {
+      let windDiv = document.createElement("div");
+      windDiv.textContent = `Vent moyen : ${forecast.wind10m || 0} km/h`;
+      dayCard.appendChild(windDiv);
+    }
+
+    if (document.getElementById("wind-direction-checkbox").checked) {
+      let windDirDiv = document.createElement("div");
+      windDirDiv.textContent = `Direction du vent : ${forecast.dirwind10m || 0}°`;
+      dayCard.appendChild(windDirDiv);
+    }
 
   // Ajouter un bouton de retour vers le formulaire
   let reloadButton = document.createElement("div");
