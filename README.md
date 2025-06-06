@@ -36,7 +36,7 @@ L'obejctif étant d'intéragir dynamique avec une API météo (Météo Concept) 
 - Ajout d'emoji dans les cartes intéractives en fonction de la météo
 - ajout d'une fonctionnalitée de mode sombre pour une expérience optimale peut importe l'heure dans la journée.
 
-## Contrainte technique
+## Contraintes techniques
 - Site responsive (adapté à tous médias)
 - Respect des standards W3C pour HTML et CSS
 - Accessibilité conforme à la norme WCAG AA 2.0
