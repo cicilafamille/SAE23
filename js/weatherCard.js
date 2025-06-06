@@ -105,13 +105,9 @@ async function createCard(data) {
     dayTitle.classList.add("weather-day-title");
     
     if (index === 0) {
-      dayTitle.textContent = `Aujourd'hui - ${data.ville}`;
-    } else if (index === 1) {
-      dayTitle.textContent = `Demain - ${data.ville}`;
-
       dayTitle.textContent = `Aujourd'hui ${emoji} - ${data.ville}`;
     } else if (index === 1) {
-      dayTitle.textContent = `Demain ${emoji} - ${data.ville}`;
+      dayTitle.textContent = `Demain ${emoji} - ${data.ville}`; 
       
     } else {
       const date = new Date();
