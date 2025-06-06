@@ -34,8 +34,9 @@ L'obejctif étant d'intéragir dynamique avec une API météo (Météo Concept) 
 - Charte graphique moderne et cohérente
 
 ## Auteur 
-Célia Bedfert 
-Première année de BUT RT 
-celia.bedfert@gmail.com
+Célia Bedfert   
+Première année de BUT RT   
+celia.bedfert@gmail.com  
 
 ## Lien vers le site 
+[instant weather](https://cicilafamille.github.io/SAE23/)
