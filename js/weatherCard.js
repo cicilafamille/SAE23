@@ -28,6 +28,46 @@ function createMap(latitude, longitude, ville, containerId) {
     .bindPopup(`<b>${ville}</b><br>Lat: ${latitude.toFixed(4)}<br>Lng: ${longitude.toFixed(4)}`)
     .openPopup();
 }
+
+// Description météo
+function getWeatherDescription(code) {
+  const descriptions = {
+    0: "Soleil", 1: "Peu nuageux", 2: "Voilé", 3: "Nuageux", 4: "Très nuageux", 5: "Couvert",
+    6: "Brouillard", 7: "Brouillard givrant", 10: "Pluie faible", 11: "Pluie modérée", 12: "Pluie forte",
+    13: "Pluie très forte", 14: "Pluie orageuse", 20: "Neige faible", 21: "Neige modérée",
+    22: "Neige forte", 30: "Pluie/neige", 40: "Averses", 50: "Orages", 60: "Averses neige", 70: "Grêle"
+  };
+  return descriptions[code] || "Inconnu";
+}
+
+// Emoji météo
+function getWeatherEmoji(code) {
+  const emojis = {
+    0: "☀️",            // Soleil
+    1: "🌤️",           // Peu nuageux
+    2: "🌥️",           // Voilé
+    3: "☁️",            // Nuageux
+    4: "🌫️",           // Très nuageux
+    5: "🌁",            // Couvert
+    6: "🌫️",           // Brouillard
+    7: "🌫️",           // Brouillard givrant
+    10: "🌦️",          // Pluie faible
+    11: "🌧️",          // Pluie modérée
+    12: "🌧️",          // Pluie forte
+    13: "🌧️",          // Pluie très forte
+    14: "⛈️",           // Pluie orageuse
+    20: "🌨️",          // Neige faible
+    21: "🌨️",          // Neige modérée
+    22: "❄️",           // Neige forte
+    30: "🌨️🌧️",       // Pluie/neige
+    40: "🌦️",          // Averses
+    50: "⛈️",           // Orages
+    60: "🌨️",          // Averses neige
+    70: "🌩️"           // Grêle
+  };
+  return emojis[code] || "❓"; // Retourne ❓ si aucun emoji défini
+}
+
 async function createCard(data) {
   console.log("Création de la carte avec les données :", data);
   // Sélectionner les sections
@@ -52,6 +92,9 @@ async function createCard(data) {
   //Créer une carte pour chaque jour
   data.forecasts.forEach((dayData, index) => {
     const forecast = dayData.forecast;
+
+    console.log("🎯 Données météo complètes :", forecast);
+    const emoji = getWeatherEmoji(forecast.weather);
     
     // Créer une carte pour ce jour
     let dayCard = document.createElement("div");
@@ -65,14 +108,19 @@ async function createCard(data) {
       dayTitle.textContent = `Aujourd'hui - ${data.ville}`;
     } else if (index === 1) {
       dayTitle.textContent = `Demain - ${data.ville}`;
+
+      dayTitle.textContent = `Aujourd'hui ${emoji} - ${data.ville}`;
+    } else if (index === 1) {
+      dayTitle.textContent = `Demain ${emoji} - ${data.ville}`;
+      
     } else {
       const date = new Date();
       date.setDate(date.getDate() + index);
       dayTitle.textContent = `${date.toLocaleDateString('fr-FR', {
-         weekday: 'long',
-          day: 'numeric',
-           month: 'long'
-      })} - ${data.ville}`;
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      })} ${emoji} - ${data.ville}`;
     }
     
     dayCard.appendChild(dayTitle);
