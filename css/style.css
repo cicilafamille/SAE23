@@ -110,7 +110,13 @@ h1 {
   border-radius: 15px;
   padding: 20px;
 }
-
+.texte-center {
+  background-color : #857f7f !important;
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .options-container {
   display: flex;
