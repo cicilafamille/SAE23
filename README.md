@@ -4,6 +4,15 @@
 Ce projet est une application web de météo qui permet à l'utilisateur d'afficher des fonctions météorologiques pour une commune choisie via un formulaire. 
 L'obejctif étant d'intéragir dynamique avec une API météo (Météo Concept) pour afficher des prévisions météorologiques détaillées pour offrir une expérience utilisateur améliorée. 
 
+## Mode d'emploi
+- acceder au site grace au lien tout en bas de la page
+- saisir le code postale souhaité et la commune si nécessaire 
+- saisir le nombre de jours souhaités pour voir les prévisions meteorologiques
+- saisir les options eventuelles
+- cliquer sur valider
+- cliquer sur nouvelle recherche pour de nouveau refaire des prévisions sur une autre ville
+- Si vous le souhaitez le mode sombre cliquer sur le bouton mode sombre 
+
 ## Technologies mobilisées
 - **Javascript** : Utilisation d'une API, manipulation du DOM, gestion dynamique de la page web
 - **HTML5 et CSS3** : structure, mise en forme, design responsive
